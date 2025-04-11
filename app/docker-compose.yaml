@@ -1,0 +1,44 @@
+services:
+  mysql:
+    image: mysql:8.0.36
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fintrack
+      MYSQL_USER: fintrack
+      MYSQL_PASSWORD: fintrack
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fintrack-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 10
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    environment:
+      - SERVICES=s3,sqs,lambda,iam,dynamodb,sts,cloudwatch
+      - EDGE_PORT=4566
+      - AWS_REGION=localhost
+      - AWS_DEFAULT_REGION=localhost
+      - DEFAULT_REGION=localhost
+    ports:
+      - "4566:4566"
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - fintrack-network
+
+volumes:
+  mysql_data:
+  localstack_data:
+
+networks:
+  fintrack-network:
+    driver: bridge
