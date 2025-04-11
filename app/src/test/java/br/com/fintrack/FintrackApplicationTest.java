@@ -1,9 +1,9 @@
-package com.example.demo;
+package br.com.fintrack;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class DemoApplicationTests {
+class FintrackApplicationTest {
 
     @Test
     void contextLoads() {
